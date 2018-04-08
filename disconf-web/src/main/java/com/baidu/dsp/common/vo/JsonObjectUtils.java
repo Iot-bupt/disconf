@@ -42,13 +42,13 @@ public class JsonObjectUtils {
      *
      * @return
      */
-    public static <T> JsonObjectBase buildObjectSuccess(String key, T value) {
+    public static <T> JsonObject buildObjectSuccess(String key, T value) {
 
         JsonObject json = new JsonObject();
         json.addData(key, value);
 
         LOG.info(json.toString());
-
+        
         return json;
     }
 

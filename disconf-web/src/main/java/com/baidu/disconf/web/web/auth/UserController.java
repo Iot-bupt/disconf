@@ -105,7 +105,6 @@ public class UserController extends BaseController {
         redisLogin.login(request, user, expireTime);
 
         VisitorVo visitorVo = userMgr.getCurVisitor();
-
         return buildSuccess("visitor", visitorVo);
     }
 
