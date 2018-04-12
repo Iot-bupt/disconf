@@ -1,7 +1,7 @@
 var appId = -1;
 var envId = -1;
 var version = "";
-getSession();
+/*getSession();*/
 
 var uploadWithFile = -1;
 

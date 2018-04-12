@@ -40,12 +40,10 @@ public class AppNewForm extends RequestFormBase {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	
 
-	public static String getApp() {
-		return APP;
+	public String getApp() {
+		return this.app;
 	}
 
     
