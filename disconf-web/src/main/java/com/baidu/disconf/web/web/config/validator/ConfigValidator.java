@@ -14,7 +14,6 @@ import com.baidu.disconf.web.service.config.service.ConfigFetchMgr;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
 import com.baidu.disconf.web.service.env.bo.Env;
 import com.baidu.disconf.web.service.env.service.EnvMgr;
-import com.baidu.disconf.web.service.user.service.AuthMgr;
 import com.baidu.dsp.common.exception.FieldException;
 
 /**
@@ -36,8 +35,6 @@ public class ConfigValidator {
     @Autowired
     private ConfigFetchMgr configFetchMgr;
 
-    @Autowired
-    private AuthMgr authMgr;
 
     /**
      * 校验
@@ -59,7 +56,6 @@ public class ConfigValidator {
         //
         // validate app
         //
-        validateAppAuth(config.getAppId());
 
         return config;
     }
@@ -140,18 +136,7 @@ public class ConfigValidator {
         return true;
     }
 
-    /**
-     * @param appId
-     */
-    private void validateAppAuth(long appId) {
-
-        boolean ret = authMgr.verifyApp4CurrentUser(appId);
-        if (ret == false) {
-            throw new FieldException(ConfNewForm.APPID, "app.auth.noright", null);
-        }
-
-    }
-
+  
     /**
      * 校验新建 配置
      *
@@ -169,7 +154,7 @@ public class ConfigValidator {
         }
 
         //
-        validateAppAuth(app.getId());
+   
 
         //
         // env
@@ -201,7 +186,6 @@ public class ConfigValidator {
         }
 
         //
-        validateAppAuth(config.getAppId());
     }
 
 }

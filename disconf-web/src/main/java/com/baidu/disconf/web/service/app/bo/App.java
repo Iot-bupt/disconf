@@ -34,13 +34,6 @@ public class App extends BaseObject<Long> {
      */
     @Column(value = Columns.DESC)
     private String desc;
-
-    /**
-     *
-     */
-    @Column(value = Columns.EMAILS)
-    private String emails;
-
     /**
      * 创建时间
      */
@@ -87,16 +80,10 @@ public class App extends BaseObject<Long> {
 
     @Override
     public String toString() {
-        return "App [name=" + name + ", desc=" + desc + ", emails=" + emails + ", createTime=" + createTime +
+        return "App [name=" + name + ", desc=" + desc +  ", createTime=" + createTime +
                    ", updateTime=" + updateTime + "]";
     }
 
-    public String getEmails() {
-        return emails;
-    }
-
-    public void setEmails(String emails) {
-        this.emails = emails;
-    }
+  
 
 }

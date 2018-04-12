@@ -29,9 +29,6 @@ public class AppNewForm extends RequestFormBase {
     @NotEmpty(message = "desc.empty")
     private String desc;
 
-    // 邮箱
-    private String emails = "";
-
 	public void setApp(String app) {
 		this.app = app;
 	}
@@ -43,15 +40,6 @@ public class AppNewForm extends RequestFormBase {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-
-	public String getEmails() {
-		return emails;
-	}
-
-	public void setEmails(String emails) {
-		this.emails = emails;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

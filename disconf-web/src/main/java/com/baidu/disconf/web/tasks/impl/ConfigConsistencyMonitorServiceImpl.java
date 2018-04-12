@@ -9,8 +9,6 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import com.baidu.disconf.web.config.ApplicationPropertyConfig;
 import com.baidu.disconf.web.service.app.bo.App;
 import com.baidu.disconf.web.service.app.service.AppMgr;
 import com.baidu.disconf.web.service.config.form.ConfListForm;
@@ -22,7 +20,6 @@ import com.baidu.disconf.web.service.zookeeper.dto.ZkDisconfData.ZkDisconfDataIt
 import com.baidu.disconf.web.service.zookeeper.service.ZkDeployMgr;
 import com.baidu.disconf.web.tasks.IConfigConsistencyMonitorService;
 import com.baidu.dsp.common.interceptor.session.SessionInterceptor;
-import com.baidu.dsp.common.utils.email.LogMailBean;
 import com.baidu.ub.common.db.DaoPageResult;
 import com.github.knightliao.apollo.utils.tool.TokenUtil;
 
@@ -37,8 +34,6 @@ public class ConfigConsistencyMonitorServiceImpl implements IConfigConsistencyMo
 
     protected static final Logger LOG = LoggerFactory.getLogger(ConfigConsistencyMonitorServiceImpl.class);
 
-    @Autowired
-    private ApplicationPropertyConfig applicationPropertyConfig;
 
     @Autowired
     private ZkDeployMgr zkDeployMgr;
@@ -52,43 +47,12 @@ public class ConfigConsistencyMonitorServiceImpl implements IConfigConsistencyMo
     @Autowired
     private ConfigMgr configMgr;
 
-    @Autowired
-    private LogMailBean logMailBean;
 
     // 每3分钟执行一次自动化校验
     //@Scheduled(fixedDelay = 3 * 60 * 1000)
     @Override
     public void myTest() {
         LOG.info("task schedule just testing, every 1 min");
-    }
-
-    /**
-     *
-     */
-    // 每30分钟执行一次自动化校验
-    @Scheduled(fixedDelay = 30 * 60 * 1000)
-    @Override
-    public void check() {
-
-        MDC.put(SessionInterceptor.SESSION_KEY, TokenUtil.generateToken());
-
-        /**
-         *
-         */
-        if (!applicationPropertyConfig.isCheckConsistencyOn()) {
-            return;
-        }
-
-        try {
-            Thread.sleep(1000 * 10);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        checkMgr();
-
-        return;
     }
 
     /**
@@ -145,8 +109,6 @@ public class ConfigConsistencyMonitorServiceImpl implements IConfigConsistencyMo
         //
         DaoPageResult<ConfListVo> daoPageResult = configMgr.getConfigList(confiConfListForm, true, true);
 
-        // 准备发送邮件通知
-        String toEmails = appMgr.getEmails(app.getId());
 
         List<ConfListVo> confListVos = daoPageResult.getResult();
 
@@ -170,12 +132,6 @@ public class ConfigConsistencyMonitorServiceImpl implements IConfigConsistencyMo
                     }
                 }
             }
-        }
-
-        if (errorList.size() != 0) {
-
-            logMailBean.sendHtmlEmail(toEmails, " monitor ConfigConsistency ",
-                    monitorInfo + "<br/><br/><br/>" + errorList.toString());
         }
     }
 }

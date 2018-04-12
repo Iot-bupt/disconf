@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.baidu.disconf.core.common.constants.DisConfigTypeEnum;
 import com.baidu.disconf.web.common.Constants;
-import com.baidu.disconf.web.config.ApplicationPropertyConfig;
 import com.baidu.disconf.web.innerapi.zookeeper.ZooKeeperDriver;
 import com.baidu.disconf.web.service.app.bo.App;
 import com.baidu.disconf.web.service.app.service.AppMgr;
@@ -42,7 +41,6 @@ import com.baidu.disconf.web.utils.MyStringUtils;
 import com.baidu.dsp.common.constant.DataFormatConstants;
 import com.baidu.dsp.common.utils.DataTransfer;
 import com.baidu.dsp.common.utils.ServiceUtil;
-import com.baidu.dsp.common.utils.email.LogMailBean;
 import com.baidu.ub.common.db.DaoPageResult;
 import com.github.knightliao.apollo.utils.data.GsonUtils;
 import com.github.knightliao.apollo.utils.io.OsUtil;
@@ -71,12 +69,6 @@ public class ConfigMgrImpl implements ConfigMgr {
 
     @Autowired
     private ZkDeployMgr zkDeployMgr;
-
-    @Autowired
-    private LogMailBean logMailBean;
-
-    @Autowired
-    private ApplicationPropertyConfig applicationPropertyConfig;
 
     @Autowired
     private ConfigHistoryMgr configHistoryMgr;
@@ -268,25 +260,6 @@ public class ConfigMgrImpl implements ConfigMgr {
         //
         configDao.updateValue(configId, CodeUtils.utf8ToUnicode(value));
         configHistoryMgr.createOne(configId, oldValue, CodeUtils.utf8ToUnicode(value));
-
-        //
-        // 发送邮件通知
-        //
-        String toEmails = appMgr.getEmails(config.getAppId());
-
-        if (applicationPropertyConfig.isEmailMonitorOn()) {
-            boolean isSendSuccess = logMailBean.sendHtmlEmail(toEmails,
-                    " config update", DiffUtils.getDiff(CodeUtils.unicodeToUtf8(oldValue),
-                            value,
-                            config.toString(),
-                            getConfigUrlHtml(config)));
-            if (isSendSuccess) {
-                return "修改成功，邮件通知成功";
-            } else {
-                return "修改成功，邮件发送失败，请检查邮箱配置";
-            }
-        }
-
         return "修改成功";
     }
 
@@ -343,14 +316,6 @@ public class ConfigMgrImpl implements ConfigMgr {
 
         configDao.create(config);
         configHistoryMgr.createOne(config.getId(), "", config.getValue());
-
-        // 发送邮件通知
-        //
-        String toEmails = appMgr.getEmails(config.getAppId());
-        if (applicationPropertyConfig.isEmailMonitorOn() == true) {
-            logMailBean.sendHtmlEmail(toEmails, " config new", getNewValue(confNewForm.getValue(), config.toString(),
-                    getConfigUrlHtml(config)));
-        }
     }
 
     /**
@@ -365,35 +330,6 @@ public class ConfigMgrImpl implements ConfigMgr {
         configHistoryMgr.createOne(configId, config.getValue(), "");
 
         configDao.deleteItem(configId);
-    }
-
-    /**
-     * 主要用于邮箱发送
-     *
-     * @return
-     */
-    private String getConfigUrlHtml(Config config) {
-
-        return "<br/>点击<a href='http://" + applicationPropertyConfig.getDomain() + "/modifyFile.html?configId=" +
-                config.getId() + "'> 这里 </a> 进入查看<br/>";
-    }
-
-    /**
-     * 主要用于邮箱发送
-     *
-     * @param newValue
-     * @param identify
-     *
-     * @return
-     */
-    private String getNewValue(String newValue, String identify, String htmlClick) {
-
-        String contentString = StringEscapeUtils.escapeHtml4(identify) + "<br/>" + htmlClick + "<br/><br/> ";
-
-        String data = "<br/><br/><br/><span style='color:#FF0000'>New value:</span><br/>";
-        contentString = contentString + data + StringEscapeUtils.escapeHtml4(newValue);
-
-        return contentString;
     }
 
     /**

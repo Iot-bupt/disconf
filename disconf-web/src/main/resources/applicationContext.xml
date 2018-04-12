@@ -54,51 +54,31 @@
         <property name="zookeeperUrlPrefix" value="${zookeeper_url_prefix}"/>
     </bean>
 
-    <bean id="applicationPropertyConfig"
-          class="com.baidu.disconf.web.config.ApplicationPropertyConfig">
-        <property name="emailHost" value="${EMAIL_HOST}"/>
-        <property name="emailPassword" value="${EMAIL_HOST_PASSWORD}"/>
-        <property name="emailUser" value="${EMAIL_HOST_USER}"/>
-        <property name="emailPort" value="25"/>
-        <property name="fromEmail" value="${DEFAULT_FROM_EMAIL}"/>
-        <property name="emailReceiver" value="${EMAIL_RECEIVER}"/>
-        <property name="emailMonitorOn" value="true"/>
-        <property name="checkConsistencyOn" value="true"/>
-        <property name="domain" value="${domain}"/>
-    </bean>
 
     <!-- import -->
-    <import resource="classpath*:myconfig/applicationContext-cache.xml"/>
     <import resource="classpath*:myconfig/applicationContext-springcache.xml"/>
 
     <!-- profile -->
     <beans profile="db-test">
         <import resource="classpath*:applicationContext-dbconfig-test.xml"/>
-        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImplMock"/>
-        <bean id="roleResourceAspect"
-              class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspectMock"/>
+     
         <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverMock"/>
     </beans>
 
     <beans profile="db-normal">
         <import resource="classpath*:myconfig/applicationContext-dbconfig.xml"/>
-        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImpl"/>
-        <bean id="roleResourceAspect" class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspect"/>
+       
         <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverImpl"/>
     </beans>
 
     <beans profile="production">
         <import resource="classpath*:myconfig/applicationContext-dbconfig.xml"/>
-        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImpl"/>
-        <bean id="roleResourceAspect" class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspect"/>
+      
         <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverImpl"/>
     </beans>
 
     <beans profile="rd">
         <import resource="classpath*:myconfig/applicationContext-dbconfig.xml"/>
-        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImplMock"/>
-        <bean id="roleResourceAspect"
-              class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspectMock"/>
         <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverMock"/>
     </beans>
 

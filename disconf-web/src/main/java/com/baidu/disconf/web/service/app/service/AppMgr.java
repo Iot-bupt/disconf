@@ -68,13 +68,4 @@ public interface AppMgr {
      * @param appId
      */
     void delete(Long appId);
-
-    /**
-     * 获取此APP的EMAIL
-     *
-     * @param id
-     *
-     * @return
-     */
-    String getEmails(Long id);
 }

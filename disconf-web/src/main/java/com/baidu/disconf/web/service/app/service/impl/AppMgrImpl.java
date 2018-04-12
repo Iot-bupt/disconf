@@ -17,8 +17,6 @@ import com.baidu.disconf.web.service.app.dao.AppDao;
 import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.disconf.web.service.app.service.AppMgr;
 import com.baidu.disconf.web.service.app.vo.AppListVo;
-import com.baidu.disconf.web.service.user.service.UserInnerMgr;
-import com.baidu.disconf.web.service.user.service.UserMgr;
 import com.baidu.dsp.common.constant.DataFormatConstants;
 import com.github.knightliao.apollo.utils.time.DateUtils;
 
@@ -33,11 +31,7 @@ public class AppMgrImpl implements AppMgr {
     @Autowired
     private AppDao appDao;
 
-    @Autowired
-    private UserInnerMgr userInnerMgr;
-
-    @Autowired
-    private UserMgr userMgr;
+ 
 
     /**
      *
@@ -54,7 +48,7 @@ public class AppMgrImpl implements AppMgr {
     @Override
     public List<AppListVo> getAuthAppVoList() {
 
-        List<App> apps = appDao.getByIds(userInnerMgr.getVisitorAppIds());
+        List<App> apps = appDao.findAll();
 
         List<AppListVo> appListVos = new ArrayList<AppListVo>();
         for (App app : apps) {
@@ -98,8 +92,6 @@ public class AppMgrImpl implements AppMgr {
         App app = new App();
         app.setName(appNew.getApp());
         app.setDesc(appNew.getDesc());
-        app.setEmails(appNew.getEmails());
-
         String curTime = DateUtils.format(new Date(), DataFormatConstants.COMMON_TIME_FORMAT);
         app.setCreateTime(curTime);
         app.setUpdateTime(curTime);
@@ -112,18 +104,6 @@ public class AppMgrImpl implements AppMgr {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void delete(Long appId) {
         appDao.delete(appId);
-    }
-
-    @Override
-    public String getEmails(Long id) {
-
-        App app = getById(id);
-
-        if (app == null) {
-            return "";
-        } else {
-            return app.getEmails();
-        }
     }
 
     @Override

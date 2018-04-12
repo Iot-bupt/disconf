@@ -1,7 +1,7 @@
 (function ($) {
 
 
-    getSession();
+    /*getSession();*/
 
     var appId = -1;
     var envId = -1;
