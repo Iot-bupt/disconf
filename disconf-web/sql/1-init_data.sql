@@ -1,6 +1,6 @@
-INSERT INTO `app` (`app_id`, `name`, `description`, `create_time`, `update_time`, `emails`)
+INSERT INTO `app` (`app_id`, `name`, `description`, `create_time`, `update_time`)
 VALUES
-    (2, 'disconf_demo', 'disconf demo', '99991231235959', '99991231235959', '');
+    (2, 'disconf_demo', 'disconf demo', '99991231235959', '99991231235959');
 
 INSERT INTO `config` (`config_id`, `type`, `name`, `value`, `app_id`, `version`, `env_id`, `create_time`, `update_time`)
 VALUES

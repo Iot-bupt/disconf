@@ -18,6 +18,7 @@ import com.baidu.disconf.client.scan.ScanMgr;
 import com.baidu.disconf.client.store.DisconfStoreProcessorFactory;
 import com.baidu.disconf.client.support.registry.Registry;
 import com.baidu.disconf.client.support.registry.RegistryFactory;
+import com.baidu.disconf.client.core.impl.*;
 
 /**
  * Disconf Client 总入口
@@ -93,10 +94,10 @@ public class DisconfMgr implements ApplicationContextAware {
             // 第一次扫描并入库
             scanMgr.firstScan(scanPackageList);
 
+
             // 获取数据/注入/Watch
             disconfCoreMgr = DisconfCoreFactory.getDisconfCoreMgr(registry);
             disconfCoreMgr.process();
-
             //
             isFirstInit = true;
 
